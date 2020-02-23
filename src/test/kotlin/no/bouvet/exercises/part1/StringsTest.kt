@@ -1,28 +1,43 @@
 package no.bouvet.exercises.part1
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import io.kotlintest.fail
+import io.kotlintest.matchers.match
+import io.kotlintest.should
+import io.kotlintest.shouldBe
+import io.kotlintest.specs.StringSpec
 
-class StringsTest {
+class StringsTest : StringSpec({
 
-    @Test
-    fun testStuff() {
-        val strings = Strings()
-        assertEquals(strings.stringFormat("Answer", 42), "Answer=42")
-
-        assertEquals(strings.splitString("Kjernlie, Simen, 28"), "SK: 28")
-
-        assertEquals(strings.isPalindrome("racecar"), true)
-        assertEquals(strings.isPalindrome("abrakadabra"), false)
-
-        assertEquals(strings.jsonFormat(listOf(1, 2, 3)), "[1, 2, 3]")
-        assertEquals(strings.jsonFormat(emptyList()), "[]")
-
-
-        val strippedJson = strings.movieToJson("Avengers: Endgame", 2019, 181).filter { !it.isWhitespace() }
-        assertEquals(strippedJson, """{"title":"Avengers:Endgame","year":2019,"runtime":181,"rating":"PG-12","country":"USA"}""")
-
-        assertEquals(strings.acronym("application programming interface"), "API")
-        assertEquals(strings.acronym("gnu's not unix"), "GNU")
+    "1. stringFormat Test" {
+        stringFormat("Answer", 42) shouldBe "Answer=42"
     }
-}
+
+    "2. splitString Test" {
+        splitString("little, kim, 28") shouldBe "KL: 28"
+    }
+
+    "3. palindrome Test" {
+        isPalindrome("palindrome") shouldBe false
+        isPalindrome("racecar") shouldBe true
+    }
+
+    "4. jsonFormat should format the input as a json list" {
+        jsonFormat(listOf(1, 2, 3, 4)) shouldBe "[1, 2, 3, 4]"
+        jsonFormat(emptyList()) shouldBe "[]"
+        jsonFormat(listOf(1)) shouldBe "[1]"
+    }
+
+
+    "5. movieToJson Test" {
+        val strippedJson = movieToJson("Avengers: Endgame", 2019, 181).filter { !it.isWhitespace() }
+        strippedJson shouldBe """{"title":"Avengers:Endgame","year":2019,"runtime":181,"rating":"PG-12","country":"USA"}"""
+    }
+
+    "6. acronym Test" {
+        acronym("application programming interface") shouldBe "API"
+        acronym("gnu's not unix") shouldBe "GNU"
+    }
+
+
+
+})

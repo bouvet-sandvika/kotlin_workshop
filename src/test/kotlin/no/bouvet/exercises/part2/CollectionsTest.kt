@@ -1,119 +1,121 @@
 package no.bouvet.exercises.part2
 
+import io.kotlintest.fail
+import io.kotlintest.matchers.beInstanceOf
+import io.kotlintest.matchers.collections.shouldContain
+import io.kotlintest.matchers.doubles.plusOrMinus
+import io.kotlintest.matchers.doubles.shouldNotBeExactly
+import io.kotlintest.should
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
+import io.kotlintest.specs.StringSpec
 import no.bouvet.data.AppInfo
 import no.bouvet.data.Category
 import no.bouvet.data.ContentRating
 import no.bouvet.data.Genre
 import no.bouvet.service.playstore.parseCsv
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import java.lang.Exception
 
-class CollectionsTest {
+class CollectionsTest : StringSpec({
 
     val appInfoList: List<AppInfo> = parseCsv("src/main/resources/googleplaystore.csv")
 
-    @Test
-    fun testRatedApps() {
+    "1. Return an implementation of AppStats" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
-        assertEquals(appStats.ratedApps(), 9366)
+        appStats should beInstanceOf<AppStats>()
     }
 
-    @Test
-    fun testAverageRating() {
+    "2. number of rated apps" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
-        assertEquals(appStats.averageRating(), (4.18..4.20))
+        appStats.ratedApps() shouldBe 9366
     }
 
-    @Test
-    fun testCategory() {
+    "3. average rating" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
-        assertEquals(appStats.averageRating(Category.ART_AND_DESIGN),  (4.34..4.36))
+        appStats.averageRating() shouldBe(4.19).plusOrMinus(0.01)
     }
 
-    @Test
-    fun testMostExpensive() {
+
+    "4. average rating in art and design" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
-        assertEquals(appStats.mostExpensiveApp().name, "I'm Rich - Trump Edition")
+        appStats.averageRating(Category.ART_AND_DESIGN) shouldBe(4.35).plusOrMinus(0.01)
     }
 
-    @Test
-    fun testTotalReviews() {
+    "5. The most expensive app in store" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
-        assertEquals(appStats.totalReviews(), 4817617393L)
+        appStats.mostExpensiveApp().name shouldBe "I'm Rich - Trump Edition"
     }
 
-    @Test
-    fun testByRating() {
+    "6. total number of reviews" {
+        val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
+        appStats.totalReviews() shouldBe 4817617393L
+    }
+
+    "7. Categories sorted by average rating in the category" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
         val categoriesByRating = appStats.categoriesOrderedByRating()
-        assertEquals(categoriesByRating.first(), Category.EVENTS)
-        assertEquals(categoriesByRating.last(), Category.DATING)
+        categoriesByRating.first() shouldBe Category.EVENTS
+        categoriesByRating.last() shouldBe Category.DATING
     }
 
-    @Test
-    fun testSorting() {
+    "8. Categories sorted by number of apps in the category" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
         val categoriesByNumberOfApps = appStats.categoriesOrderedByNumberOfApps()
-        assertEquals(categoriesByNumberOfApps.first(), Pair(Category.FAMILY, 1972))
-        assertEquals(categoriesByNumberOfApps.last(), Pair(Category.BEAUTY, 53))
+        categoriesByNumberOfApps.first() shouldBe Pair(Category.FAMILY, 1972)
+        categoriesByNumberOfApps.last() shouldBe Pair(Category.BEAUTY, 53)
     }
 
-    @Test
-    fun testGenre() {
+    "9. Average rating for TRIVIA" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
-        assertEquals(appStats.averageRatingForGenre(Genre.TRIVIA), (4.029..4.049))
+        appStats.averageRatingForGenre(Genre.TRIVIA) shouldBe (4.039).plusOrMinus(0.01)
     }
 
-    @Test
-    fun testHighestRated() {
+    "10. Highest rated genre" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
-        assertEquals(appStats.highestRatedGenre(), Genre.EVENTS)
+        appStats.highestRatedGenre() shouldBe Genre.EVENTS
     }
 
-    @Test
-    fun testCategoryStats() {
+    "11. Implement CategoryStats" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
         val categoryStat = appStats.categoryStats(Category.EVENTS)
-        assertEquals(categoryStat.name, Category.EVENTS.name)
-                assertEquals(categoryStat.averagePrice, (1.708..1.728))
-                assertEquals(categoryStat.size, 64)
-                assertEquals(categoryStat.averageRating, (4.425..4.445))
+        categoryStat.name shouldBe Category.EVENTS.name
+        categoryStat.averagePrice shouldBe(1.718).plusOrMinus(0.01)
+        categoryStat.size shouldBe 64
+        categoryStat.averageRating shouldBe(4.435).plusOrMinus(0.01)
     }
 
-    @Test
-    fun testContentRating() {
+    "12. ContentRating map" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
         val groups = appStats.groupByContentRating()
-        assertEquals(groups.size, 6)
-        assertEquals(groups[ContentRating.EVERYONE]?.size, 8714)
+        groups.size shouldBe 6
+        groups[ContentRating.EVERYONE]?.size shouldBe 8714
         val appInfo = appInfoList.find { it.contentRating == ContentRating.TEEN }
-        assertTrue(groups[ContentRating.TEEN]!!.contains(appInfo))
+        groups[ContentRating.TEEN]!! shouldContain appInfo
     }
 
-    @Test
-    fun testContentRatingAverage() {
+    "13. ContentRating Average" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
         val contentRatingMap = appStats.averageRatingByContentRating()
-        assertEquals(contentRatingMap.size, 6)
-        assertEquals(contentRatingMap[ContentRating.ADULTS_18], (4.29..4.31))
-        assertEquals(contentRatingMap[ContentRating.UNRATED], (4.09..4.11))
+        contentRatingMap.size shouldBe 6
+        contentRatingMap[ContentRating.ADULTS_18] shouldBe(4.3).plusOrMinus(0.01)
+        contentRatingMap[ContentRating.UNRATED] shouldBe(4.1).plusOrMinus(0.01)
     }
 
-    @Test
-    fun testTopRated() {
+    "14. Top rated apps" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
         val topRated = appStats.topRated(10)
-        assertEquals(topRated[0], Triple("Ríos de Fe", 5.0, 141))
-        assertEquals(topRated[4], Triple("Master E.K", 5.0, 90))
-        assertEquals(topRated[9], Triple("Ek Vote", 5.0, 43))
+        topRated[0] shouldBe Triple("Ríos de Fe", 5.0, 141)
+        topRated[4] shouldBe Triple("Master E.K", 5.0, 90)
+        topRated[9] shouldBe Triple("Ek Vote", 5.0, 43)
     }
 
-    @Test
-    fun testFindApps() {
+    "15. Find apps" {
         val appStats: AppStats = AppStats.getAppStatsService(appInfoList)
-        assertEquals(appStats.findApps(minRating = 4.0, maxPrice = 10.0).first().name,  "Facebook")
-        assertEquals(appStats.findApps(minRating = 4.5, maxPrice = 10.0, category = Category.BEAUTY).first().name,  "ipsy: Makeup, Beauty, and Tips")
-        assertEquals(appStats.findApps(minRating = 3.5, maxPrice = 1.0, genre = Genre.BRAIN_GAMES).first().name,  "Where's My Water? Free")
+        appStats.findApps(minRating = 4.0, maxPrice = 10.0)
+            .first().name shouldBe "Facebook"
+        appStats.findApps(minRating = 4.5, maxPrice = 10.0, category = Category.BEAUTY)
+            .first().name shouldBe "ipsy: Makeup, Beauty, and Tips"
+        appStats.findApps(minRating = 3.5, maxPrice = 1.0, genre = Genre.BRAIN_GAMES)
+            .first().name shouldBe "Where's My Water? Free"
     }
-}
+})
