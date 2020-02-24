@@ -17,7 +17,7 @@ fun stringFormat(name: String, value: Number): String {
  * the a string formatted as "FL: Age"
  * where F and L are uppercase initials
  *
- * Useful functions:
+ * HINT: Useful functions:
  *   [Char.toUpperCase]
  *   [String.first]
  *   [String.split]
@@ -32,7 +32,7 @@ fun splitString(input: String): String {
  *
  * Decide if the given string is a palindrome (reads the same forward and backwards).
  *
- * [String.reversed] can be useful
+ * HINT: [String.reversed] can be useful
  *
  */
 fun isPalindrome(s: String): Boolean {
@@ -62,6 +62,8 @@ fun jsonFormat(list: List<Int>): String {
  *      ...
  * }
  * """
+ *
+ * HINT: [String.trimIndent] can be useful
  */
 fun movieToJson(title: String, year: Int, runtime: Int, rating: String = "PG-12", country: String = "USA"): String {
     TODO()
@@ -74,6 +76,8 @@ fun movieToJson(title: String, year: Int, runtime: Int, rating: String = "PG-12"
  *
  * Example: "application programming interface" => "API"
  *
+ *
+ * HINT: [String.split], [String.first], [List.joinToString] and [List.map] can be useful
  */
 fun acronym(title: String): String {
     TODO()

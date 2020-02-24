@@ -61,6 +61,8 @@ fun dataClassEquality(t1: Task, t2: Task): Boolean {
  * Given an Instance of [Task] as input, return another instance that is equal to it,
  * but with 'completed' set to 'true'. Since [Task] now is a 'data class' you should
  * be able to do this in a single line
+ *
+ * HINT: copy
  */
 fun copyAndComplete(task: Task): Task {
     TODO()

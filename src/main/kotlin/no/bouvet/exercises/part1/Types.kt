@@ -15,6 +15,8 @@ import no.bouvet.service.petstore.PetStoreService
  *   LASTNAME: Williamson
  *   OCCUPATION: Footballer
  *
+ * HINT: ?: (Elvis)
+ *
  */
 fun nullable(firstName: String, middleName: String?, lastName: String, occupation: String?): String {
     TODO()
@@ -42,6 +44,8 @@ fun findPetAndCategoryName(petStoreService: PetStoreService, petId: PetId): Pair
  *  0 if it's a Double greater or equal to 0
  *  -1 if it's a Double less than 0
  *  null for all other input
+ *
+ * HINT: [String.first] and [Int.rem] can be useful
  *
  */
 fun mysteryInput(input: Any?): Any? {

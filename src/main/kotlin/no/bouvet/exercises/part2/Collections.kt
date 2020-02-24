@@ -50,6 +50,9 @@ interface AppStats {
      * 2. Number of apps with Rating
      *
      * Return the number of apps with a rating != null
+     *
+     * HINT: count
+     *
      */
     fun ratedApps(): Int
 
@@ -57,6 +60,8 @@ interface AppStats {
      * 3. Average Rating
      *
      * Calculate the average rating for all apps in the list (excluding apps where rating == null)
+     *
+     * HINT: sumByDouble
      */
     fun averageRating(): Double
 
@@ -65,6 +70,8 @@ interface AppStats {
      *
      * The average rating for all apps in a single category
      * (excluding apps without rating)
+     *
+     * HINT: filter and sumByDouble
      */
     fun averageRating(category: Category): Double
 
@@ -72,6 +79,8 @@ interface AppStats {
      * 5. Most Expensive
      *
      * Return the most expensive app
+     *
+     * HINT: maxBy
      */
     fun mostExpensiveApp(): AppInfo
 
@@ -79,6 +88,8 @@ interface AppStats {
      * 6. Total reviews
      *
      * Return the total number of reviews for all apps
+     *
+     * HINT: fold
      */
     fun totalReviews(): Long
 
@@ -87,6 +98,8 @@ interface AppStats {
      *
      * Return a list of categories, ordered by average rating for the category from highest to lowest
      * (excluding apps without rating when calculating average rating)
+     *
+     * HINT: asSequence(), filter, groupBy, map, sumByDouble, sortedByDescending, toList
      */
     fun categoriesOrderedByRating(): List<Category>
 
@@ -94,6 +107,8 @@ interface AppStats {
      * 8. Categories ordered by apps
      *
      * Return a list of categories and number of apps in the category as a list of pairs, ordered from most to least
+     *
+     * HINT: asSequence(), filter, groupBy, map, sortedByDescending
      */
     fun categoriesOrderedByNumberOfApps(): List<Pair<Category, Int>>
 
@@ -101,6 +116,8 @@ interface AppStats {
      * 9. Average rating for Genre
      *
      * Return the average rating for a single Genre
+     *
+     * HINT: filter, let, sumByDouble
      */
     fun averageRatingForGenre(genre: Genre): Double
 
@@ -108,6 +125,8 @@ interface AppStats {
      * 10. Highest rated Genre
      *
      * Find the Genre with the highest average rating
+     *
+     * HINT: map, maxBy
      */
     fun highestRatedGenre(): Genre
 
@@ -116,6 +135,8 @@ interface AppStats {
      *
      * Return your own implementation of the [CategoryStats] interface for the specified Category
      * (See at the bottom of this file for the interface)
+     *
+     * HINT: filter
      */
     fun categoryStats(category: Category): CategoryStats
 
@@ -123,11 +144,15 @@ interface AppStats {
      * 12. ContentRating map
      *
      * Separate apps into groups according to ContentRating, and return as a Map from ContentRating => List of Apps
+     *
+     * HINT: filter, groupBy
      */
     fun groupByContentRating(): Map<ContentRating, List<AppInfo>>
 
     /**
      * 13. Return a Map from ContentRating => Average Rating
+     *
+     * HINT: mapValues, filter, map
      */
     fun averageRatingByContentRating(): Map<ContentRating, Double>
 
@@ -136,6 +161,8 @@ interface AppStats {
      *
      * Return a list of the Top [n] highest rated apps. If some apps have the same rating, order them by number of reviews
      * The return value is a [List] of [Triple]'s with app name, rating and number of reviews
+     *
+     * HINT: filter, sortedWith, then, map, take
      */
     fun topRated(n: Int): List<Triple<String, Double, Int>>
 
@@ -144,6 +171,8 @@ interface AppStats {
      *
      * Return a list with all apps that satisfy the given criteria. Order the list by number of reviews for each app
      * (with regards to minRating a missing rating should be considered as 0 stars)
+     *
+     * HINT: filter, contains, sortedByDescending
      */
     fun findApps(minRating: Double, maxPrice: Double, category: Category? = null, genre: Genre? = null): List<AppInfo>
 }

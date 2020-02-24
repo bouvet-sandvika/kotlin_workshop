@@ -88,7 +88,7 @@ fun abs(value: Double): Double {
  * except for years that are exactly divisible by 100,
  * but these centurial years *are* leap years if they are exactly divisible by 400.
  *
- * The function [Int.rem] will be usefull
+ * HINT: The function [Int.rem] will be usefull
  *
  */
 fun isLeapYear(year: Int): Boolean {
@@ -104,6 +104,7 @@ fun isLeapYear(year: Int): Boolean {
  *
  * use `Pair(minutes, seconds)` to return two values
  *
+ *  HINT: The functions [Int.div] and [Int.rem] will be usefull
  *
  */
 fun pace(distance: Int, minutes: Int, seconds: Int): Pair<Int, Int> {
